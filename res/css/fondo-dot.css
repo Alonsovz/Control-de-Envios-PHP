@@ -1,0 +1,61 @@
+#fondo-dot {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    margin: auto;
+    background: #fafafa;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    overflow: hidden;
+}
+
+.dot-green {
+    background: rgba(194, 223, 141, 0.3);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    transform: translateY(-50px);
+    transition: all .5s ease; 
+    /* animation:greenA 5s infinite alternate-reverse;
+    animation-timing-function: linear; */
+}
+
+.dot-gray {
+    background: rgb(1, 1, 1, 0.2);
+    width: 15px;
+    height: 15px;
+    border-radius: 50%;
+    margin: 20px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    transform: translateY(40px);
+    transition: all .5s ease; 
+    /* animation: grayA 5s infinite alternate-reverse;
+    animation-timing-function: linear; */
+}
+
+@keyframes greenA {
+    from {
+        transform: translateY(0px);
+    }
+
+    to {
+        transform: translateY(-70px);
+    }
+}
+
+@keyframes grayA{
+    from {
+        transform: translateY(0px);
+    }
+
+    to {
+        transform: translateY(30px);
+    }
+}
