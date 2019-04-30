@@ -37,6 +37,31 @@ class DaoEnvio extends DaoBase {
         return $resultado["numero"];
     }
 
+    // Eliminado de envíos
+    public function eliminarPaquete() {
+        $_query = "call eliminarPaquete({$this->objeto->getCodigoEnvio()})";
+
+        $resultado = $this->con->ejecutar($_query);
+
+        if($resultado) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+
+    public function eliminarDetalle() {
+        $_query = "call eliminarDetalle({$this->objeto->getCodigoDetalleEnvio()})";
+
+        $resultado = $this->con->ejecutar($_query);
+		
+        if($resultado) {
+            return 11;
+        } else {
+            return 0;
+        }
+    }
+
     public function actualizarDetalle() {
         $_query = "call actualizarDetalle({$this->objeto->getCodigoDetalleEnvio()}, {$this->objeto->getCodigoStatus()}, '{$this->objeto->getObservacion()}', {$this->objeto->getCodigoMensajero()})";
 
@@ -268,6 +293,8 @@ class DaoEnvio extends DaoBase {
 
             $btnVer = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" id=\"'.$fila["codigoEnvio"].'\" class=\"ui btnVer icon secondary small button\"><i class=\"list ul icon\"></i></button>';
             $btnCorreo = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" class=\"ui btnCorreo icon teal small button\"><i class=\"envelope icon\"></i></button>';
+            //$btnEliminar = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" class=\"ui btnEliminar icon red small button\"><i class=\"trash icon\"></i></button>';
+            $btnEliminar = '';
 
             $sub_query = "call detallesEnvioLabel({$fila["codigoEnvio"]})";
 
@@ -315,7 +342,7 @@ class DaoEnvio extends DaoBase {
                             "nomUsuario": "'.$fila["nomUsuario"].'",
                             "nombre": "'.$fila["nombre"].' '.$fila["apellido"].'",
                             "documentos": "'.$labels.'",
-                            "Acciones": "'.$btnCorreo.' '.$btnVer.'"
+                            "Acciones": "'.$btnCorreo.' '.$btnVer.' '.$btnEliminar.'"
                         }';
 
             $_json .= $object.',';
@@ -377,6 +404,7 @@ class DaoEnvio extends DaoBase {
 
             $btnVer = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" id=\"'.$fila["codigoEnvio"].'\" class=\"ui btnVer icon secondary small button\"><i class=\"list ul icon\"></i></button>';
             $btnCorreo = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" class=\"ui btnCorreo icon teal small button\"><i class=\"envelope icon\"></i></button>';
+            // $btnEliminar = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" class=\"ui btnEliminar icon red small button\"><i class=\"trash icon\"></i></button>';
 
             $sub_query = "call detallesEnvioLabel({$fila["codigoEnvio"]})";
 

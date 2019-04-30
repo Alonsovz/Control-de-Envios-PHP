@@ -14,7 +14,7 @@ $res = $con ->query($sql);
 $res1 = $con1->query($sql1);
 
     $validar = $res1->fetch_assoc();
-        $validar = $validar['fechaRevision'];
+        $validar = $validar['fecha'];
         if($validar=="")
         {
             $tabla = '<h1>A&uacute;n no se ha realizado ningún registro</h1>';
@@ -27,12 +27,6 @@ $res1 = $con1->query($sql1);
         }
 
 $tabla="";
-
-$tz = 'America/El_Salvador';
-$timestamp = time();
-$dt = new DateTime("now", new DateTimeZone($tz)); //first argument "must" be a string
-$dt->setTimestamp($timestamp); //adjust the object to correct timestamp
-$fechaActual = $dt->format('d/m/Y');
 
 $tabla .= '<style>
                 td { 
@@ -58,17 +52,15 @@ $tabla .= '<style>
 $tabla.= "
             <div class='header'>
                 <h1>Env&iacute;os Deloitte<font color='#85BC22' size='100px'>.</font></h1>
-                <p>Fecha: <b>".$fechaActual."</b></p>
+                <p>Fecha: <b>".date("d/m/Y")."</b></p>
             </div>    
 
             <table class='tabla'>
             <tr>
                 <th>C&oacute;digo</th>
                 <th>Usuario</th>
-                <th>Hora Registro</th>
-                <th>Fecha Registro</th>
-                <th>Hora Revisi&oacute;n</th>
-                <th>Fecha Revisi&oacute;n</th>
+                <th>Hora</th>
+                <th>Fecha</th>
                 <th>Tr&aacute;mite</th>
                 <th>Cliente</th>
                 <th>&Aacute;rea</th>
@@ -83,10 +75,8 @@ $tabla.= "
 $tabla.="<tr>
                 <td>".$fila['correlativoDetalle']."</td>
                 <td>".$fila['nomUsuario']."</td>
-                <td>".$fila['horaRegistro']."</td>
-                <td>".$fila['fechaRegistro']."</td>
-                <td>".$fila['horaRevision']."</td>
-                <td>".$fila['fechaRevision']."</td>
+                <td>".$fila['hora']."</td>
+                <td>".$fila['fecha']."</td>
                 <td>".$fila['descTipoTramite']."</td>
                 <td>".$fila['nombreCliente']."</td>
                 <td>".$fila['descArea']."</td>

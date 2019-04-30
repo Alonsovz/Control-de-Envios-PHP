@@ -897,10 +897,13 @@ insert into area values (null, 'Tecnología',1);
 
 # Usuario
 insert into usuario values (null, 'Karla Guadalupe', 'Arevalo Vega', 'kgarevalo', 'kgarevalo@deloitte.com', sha1('Deloitte123!'), 1, 1, 1,1);
+/*insert into usuario values (null, 'Jorge Luis', 'Sidgo Pimentel', 'jlsidgo', 'jorge.sidgo@gmail.com', sha1('Deloitte123!'), 1, 1, 1,1);
+insert into usuario values (null, 'Fabio Alonso', 'Mejia', 'famejia', 'masterjsidgop@gmail.com', sha1('Deloitte123!'), 1, 1, 1,1);
+insert into usuario values (null, 'Carlos Eduardo', 'Campos', 'cecampos', 'jsidgopimentel21@outlook.com', sha1('Deloitte123!'), 1, 1, 1,1);
+insert into usuario values (null, 'John', 'Doe', 'johndoe', 'johndoe@deloitte.com', sha1('123'), 1, 2, 4,1);*/
 
 #Cliente
 insert into clientes values
-(null, '3041915', '21st Century Oncology, Inc.', '3661 South Miami Ave', 'Miami', 1),
 (null, '465000', 'Carlos Gustavo López Ayala', 'Residencial y Calle Primavera #11,', 'SANTA TECLA', 1),
 (null, '465001', 'Sun Chemical de Centroamérica S.A. Sun Chemical de Centroamérica S.A.', 'Blvd. Del Ejercito Nacional Km 5 1/', 'SOYAPANGO', 1),
 (null, '465002', 'Abruzzo S.A. de C.V.', 'Km 16 1/2 Carretera al Puerto de La', 'LA LIBERTAD', 1),
@@ -930,7 +933,7 @@ insert into mensajero values(null, 'No Asignado',1);
 insert into mensajero values(null, 'Enrique Segoviano',1);
 insert into mensajero values(null, 'Ramon Valdéz',1);
 
-insert into envio values(null, concat('ED', 1), 1, curdate(), DATE_FORMAT(NOW(), "%H:%i:%s" ), 1);
+insert into envio values(null, concat('ED', 1), 2, curdate(), DATE_FORMAT(NOW(), "%H:%i:%s" ), 1);
 insert into detalleEnvio values (null, 'DD1', 1, 1, 1, 1, 1, 3, '123', '$0.00', '123', curdate(),curdate(),  DATE_FORMAT(NOW(), "%H:%i:%s" ), curdate(), 1);
 /*
 

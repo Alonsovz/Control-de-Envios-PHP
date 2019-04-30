@@ -131,6 +131,26 @@ class EnvioController extends ControladorBase {
         echo $res;
     }
 
+    public function eliminarPaquete() {
+        $dao = new DaoEnvio();
+
+        $id = $_REQUEST["id"];
+
+        $dao->objeto->setCodigoEnvio($id);
+        
+        echo $dao->eliminarPaquete();
+    }
+
+    public function eliminarDetalle() {
+        $dao = new DaoEnvio(); 
+
+        $id = $_REQUEST["id"];
+
+        $dao->objeto->setCodigoDetalleEnvio($id);
+        
+        echo $dao->eliminarDetalle();
+    }
+
     public function getDetallesEnvio() {
         $dao = new DaoEnvio();
 

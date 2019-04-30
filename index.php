@@ -1,5 +1,6 @@
 <?php 
 
+//error_reporting(0);
 require_once 'dAutoload.php';
 
 $exec = new Exec();

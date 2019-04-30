@@ -59,6 +59,7 @@ class Mail {
         }
 
 
+
         $plantilla = str_replace('%estadoCuenta%', $estadoCuenta, $plantilla);
         $plantilla = str_replace('%celda%', $celda, $plantilla);
 

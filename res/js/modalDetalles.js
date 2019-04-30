@@ -1,14 +1,14 @@
 Vue.component('modal-detalles', {
 
-props: {
-detalles: {
-type: Array,
-required: false
-}
-},
+    props: {
+        detalles: {
+            type: Array,
+            required: false
+        }
+    },
 
 
-template: `<div class="ui longer fullscreen first coupled modal" id="modalDetalles">
+    template: `<div class="ui longer fullscreen first coupled modal" id="modalDetalles">
     <div class="header">
         Documentos del Paquete
     </div>
@@ -18,7 +18,6 @@ template: `<div class="ui longer fullscreen first coupled modal" id="modalDetall
             <table v-if="detalles" class="ui selectable very compact single line table">
                 <thead>
                     <tr>
-                    
                         <th>Correlativo</th>
                         <th>Trámite</th>
                         <th>Cliente</th>
@@ -66,6 +65,9 @@ template: `<div class="ui longer fullscreen first coupled modal" id="modalDetall
                             <button @click="$parent.modalCambiar(detalle.codigoDetalleEnvio, detalle.correlativoDetalle, detalle.descTipoTramite, detalle.nombreCliente, detalle.descArea, detalle.descTipoDocumento, detalle.descStatus, detalle.observacion)" type="button" class="ui mini circular primary icon button btnCambios">
                                 <i class="edit icon"></i>
                             </button>
+                            <!--<button @click="$parent.modalEliminarDetalle(detalle.codigoDetalleEnvio)" type="button" class="ui mini circular red icon button btnEliminarDetalle">
+                                <i class="trash icon"></i>
+                            </button>-->
                         </td>
                     </tr>
                 </tbody>

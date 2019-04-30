@@ -1,8 +1,8 @@
 <div id="app">
 
-        <div id="cargando" class="ui dimmer">
-                <div class="ui big loader"></div>
-        </div>
+    <div id="cargando" class="ui dimmer">
+        <div class="ui big loader"></div>
+    </div>
 
     <modal-detalles :detalles="detalles"></modal-detalles>
 
@@ -24,11 +24,46 @@
         </div>
     </div>
 
+    <div class="ui modal tiny" id="modalEliminar">
+
+        <div class="header">
+            Eliminar Paquete
+        </div>
+        <div class="content">
+            <h4>¿Está seguro de querer eliminar este paquete?</h4>
+        </div>
+        <div class="actions">
+            <button class="ui black deny button">
+                Cancelar
+            </button>
+            <button class="ui right red button" id="btnEliminar" @click="eliminar">
+                Eliminar
+            </button>
+        </div>
+    </div>
+
+    <div class="ui modal tiny" id="modalEliminarDetalle">
+
+        <div class="header">
+            Eliminar Documento
+        </div>
+        <div class="content">
+            <h4>¿Está seguro de querer eliminar este documento?</h4>
+        </div>
+        <div class="actions">
+            <button class="ui black deny button">
+                Cancelar
+            </button>
+            <button class="ui right red button" id="btnEliminarDetalle" @click="eliminarDetalle">
+                Eliminar
+            </button>
+        </div>
+    </div>
 
     <div class="ui small second coupled modal" id="modalCambios">
 
         <div id="cargandoModal" class="ui inverted dimmer">
-                <div class="ui big loader"></div>
+            <div class="ui big loader"></div>
         </div>
 
         <div class="header">
@@ -79,17 +114,18 @@
                         <option value="3">Recibido</option>
                         <option value="4">Pendiente</option>
                         <option value="5">Completo</option>
+                        <option value="6">Eliminar</option>
                     </select>
                 </div>
                 <div class="field">
                     <label for="">Observación:</label>
                     <input v-model="cambiarDetalle.observacion" type="text" id="obs" name="obs">
                 </div>
-                    <input type="hidden" id="idAutorizar" name="idAutorizar">
+                <input type="hidden" id="idAutorizar" name="idAutorizar">
                 <div class="field">
-                     <div class="ui toggle checkbox">
-                           <input type="checkbox" name="rbtnMensajero" id="rbtnMensajero" tabindex="0" value="rbtnMensajero">
-                              <label>Agregar Mensajero</label>
+                    <div class="ui toggle checkbox">
+                        <input type="checkbox" name="rbtnMensajero" id="rbtnMensajero" tabindex="0" value="rbtnMensajero">
+                        <label>Agregar Mensajero</label>
                     </div>
                 </div>
 
@@ -185,9 +221,9 @@
 
             idEnvio: 0,
 
-            mensajeros: JSON.parse('<?php echo $mensajerosCMB?>'),
+            mensajeros: JSON.parse('<?php echo $mensajerosCMB ?>'),
 
-            paquetesManana: <?php echo $numPaquetesManana?>,
+            paquetesManana: <?php echo $numPaquetesManana ?>,
 
             datosDetalle: {
                 correlativo: '',
@@ -196,6 +232,10 @@
                 area: '',
                 tipoDoc: ''
             },
+
+            idEliminar: 0,
+
+            idEliminarDetalle: 0,
 
             datosCorreo: {
                 idEnvio: 0,
@@ -223,7 +263,7 @@
                     data: {
                         id: id
                     },
-                    success: function (data) {
+                    success: function(data) {
                         app.detalles = JSON.parse(data);
                         $('#frmDetalles').removeClass('loading');
                     }
@@ -237,7 +277,7 @@
             },
 
             reloadTabla2() {
-                if(this.paquetesManana > 0) {
+                if (this.paquetesManana > 0) {
                     tablaManana.ajax.reload();
                 }
             },
@@ -263,12 +303,36 @@
 
                 $('#modalCambios').modal('setting', 'autofocus', false).modal('setting', 'closable', false)
                     .modal('show');
-                    $('#mensaje').hide();
+                $('#mensaje').hide();
                 $('#modalDetalles').modal('hide');
             },
 
+            modalEliminar(id) {
+
+                this.idEliminar = id;
+
+                $('#modalEliminar').modal('setting', 'autofocus', false).modal('setting', 'closable', false)
+                    .modal('show');
+            },
+
+            modalEliminarDetalle(id) {
+                this.idEliminarDetalle = id;
+
+                $('#modalEliminarDetalle').modal('setting', 'autofocus', false).modal('setting', 'closable', false)
+                    .modal('show');
+            },
+
+            eliminar() {
+                $('#btnEliminar').addClass('loading');
+
+                // $.ajax({
+                //     type: 'POST',
+                //     url:
+                // });
+            },
+
             cerrarCambios(param) {
-                if(param == 1) {
+                if (param == 1) {
                     $('#modalCambios').modal('hide');
                     $('#modalDetalles').modal('setting', 'autofocus', false)
                         .modal('setting', 'closable', false)
@@ -297,51 +361,88 @@
                 console.log('fin');
             },
 
-            cambiarEstado() {
-
-                $('#cargandoModal').addClass('active');
-                var detalle = JSON.stringify(this.cambiarDetalle);
-
-                // alert('cambiar estado: ' +this.datosCorreo.idUsuario);
+            eliminarDetalle(idDetalle) {
+                // $('#btnEliminarDetalle').addClass('loading');
 
                 $.ajax({
                     type: 'POST',
-                    url: '?1=EnvioController&2=actualizarDetalle',
+                    url: '?1=EnvioController&2=eliminarDetalle',
                     data: {
-                        detalle: detalle,
-                        idUsuario: app.datosCorreo.idUsuario,
-                        idEnvio: app.datosCorreo.idEnvio
+                        id: idDetalle
                     },
-                    success: function (r) {
+                    success: function(r) {
 
-                        if (r == 1) {
+                        if (r == 11) {
+
                             swal({
                                 title: null,
-                                text: 'Los cambios fueron guardados',
+                                text: 'El documento fue eliminado',
                                 type: 'success',
                                 showConfirmButton: false,
                                 timer: 1000
                             });
 
-                        } else if(r == 11) {
-                            swal({
-                                title: null,
-                                text: 'Los cambios fueron guardados y el correo de revisión fue enviado',
-                                type: 'success'
-                            });
+                            app.cargarDetalles(app.idEnvio, app.datosCorreo.idUsuario);
+                            app.cerrarCambios(r);
+                            app.reloadTabla();
+                            app.reloadTabla2();
+
+                            
+                            $('#cargandoModal').removeClass('active');
                         }
-
-                        $('#mensaje').hide();
-                        $('#rbtnMensajero').prop('checked', false);
-                        app.cargarDetalles(app.idEnvio, app.datosCorreo.idUsuario);
-                        app.cerrarCambios(r);
-                        app.reloadTabla();
-                        app.reloadTabla2();
-
-                        $('#cargandoModal').removeClass('active');
                     }
                 });
 
+                this.cargarDetalles(app.idEnvio, app.datosCorreo.idUsuario);
+            },
+
+            cambiarEstado() {
+
+                $('#cargandoModal').addClass('active');
+
+                if (this.cambiarDetalle.idStatus == 6) {
+                    this.eliminarDetalle(this.cambiarDetalle.idDetalle);
+                } else {
+                    var detalle = JSON.stringify(this.cambiarDetalle);
+
+                    $.ajax({
+                        type: 'POST',
+                        url: '?1=EnvioController&2=actualizarDetalle',
+                        data: {
+                            detalle: detalle,
+                            idUsuario: app.datosCorreo.idUsuario,
+                            idEnvio: app.datosCorreo.idEnvio
+                        },
+                        success: function(r) {
+
+                            if (r == 1) {
+                                swal({
+                                    title: null,
+                                    text: 'Los cambios fueron guardados',
+                                    type: 'success',
+                                    showConfirmButton: false,
+                                    timer: 1000
+                                });
+
+                            } else if (r == 11) {
+                                swal({
+                                    title: null,
+                                    text: 'Los cambios fueron guardados y el correo de revisión fue enviado',
+                                    type: 'success'
+                                });
+                            }
+
+                            $('#mensaje').hide();
+                            $('#rbtnMensajero').prop('checked', false);
+                            app.cargarDetalles(app.idEnvio, app.datosCorreo.idUsuario);
+                            app.cerrarCambios(r);
+                            app.reloadTabla();
+                            app.reloadTabla2();
+
+                            $('#cargandoModal').removeClass('active');
+                        }
+                    });
+                }
             },
 
             modalConfirmar(idUsuario, idEnvio) {
@@ -377,7 +478,7 @@
                         idUsuario: app.datosCorreo.idUsuario,
                         idEnvio: app.datosCorreo.idEnvio
                     },
-                    success: function (r) {
+                    success: function(r) {
 
                         if (r == 1) {
                             swal({
@@ -410,33 +511,36 @@
         beforeMount() {
             this.actualizarFechas();
         }
-        
+
     });
 </script>
 
 <script>
-    $(function () {
+    $(function() {
         $('.sixteen.wide.column').children().children().css('margin', '0');
     });
 </script>
 
 <script>
-    $(function () {
-        $(document).on("click", ".btnVer", function () {
+    $(function() {
+        $(document).on("click", ".btnVer", function() {
             $('#modalDetalles').modal('setting', 'autofocus', false).modal('setting', 'closable', false)
                 .modal('show');
             app.cargarDetalles($(this).attr('codigo-envio'), $(this).attr('codigo-usuario'));
         });
-        $(document).on("click", ".btnCorreo", function () {
+        $(document).on("click", ".btnCorreo", function() {
             app.modalConfirmar($(this).attr('codigo-usuario'), $(this).attr('codigo-envio'));
+        });
+        $(document).on("click", ".btnEliminar", function() {
+            app.modalEliminar($(this).attr('codigo-usuario'), $(this).attr('codigo-envio'));
         });
     });
 
     $('#rbtnMensajero').click(function() {
-        if($(this).prop('checked')) {
+        if ($(this).prop('checked')) {
             $('#mensaje').show();
         } else {
             $('#mensaje').hide();
         }
     });
-</script>
+</script> 
