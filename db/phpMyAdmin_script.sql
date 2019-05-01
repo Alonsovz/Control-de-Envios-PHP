@@ -138,9 +138,7 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `detallesEnvioLabel` (IN `idEnvio` I
 	inner join envio e on e.codigoEnvio = d.codigoEnvio
     inner join status s on s.codigoStatus = d.codigoStatus
     
-    where e.codigoEnvio = idEnvio
-    
-    order by d.codigoDetalleEnvio desc;
+    where e.codigoEnvio = idEnvio order by d.codigoDetalleEnvio desc;
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `editarArea` (IN `nom` VARCHAR(50), IN `idArea` INT)  begin
@@ -215,9 +213,11 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `getEncabezadoEnvio` (IN `idEnvio` I
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `historialEnvios` ()  begin
-	select Distinct(e.codigoEnvio), e.correlativoEnvio, DATE_FORMAT(e.fecha,'%d/%m/%Y') as fecha, e.hora, u.nomUsuario, u.nombre, u.apellido from envio e
+	select Distinct(e.codigoEnvio), e.correlativoEnvio,
+   DATE_FORMAT(e.fecha,'%d/%m/%Y') as fecha, e.hora, u.nomUsuario, u.nombre, u.apellido from envio e
 	inner join usuario u on u.codigoUsuario = e.codigoUsuario
 	inner join detalleEnvio d on e.codigoEnvio = d.codigoEnvio;
+  
 end$$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `login` (IN `user` VARCHAR(50), IN `contra` VARCHAR(75))  begin

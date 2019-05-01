@@ -436,8 +436,8 @@
                             $('#rbtnMensajero').prop('checked', false);
                             app.cargarDetalles(app.idEnvio, app.datosCorreo.idUsuario);
                             app.cerrarCambios(r);
-                            app.reloadTabla();
-                            app.reloadTabla2();
+                           app.reloadTabla();
+                           app.reloadTabla2();
 
                             $('#cargandoModal').removeClass('active');
                         }

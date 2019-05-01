@@ -125,7 +125,7 @@ class EnvioController extends ControladorBase {
         $res = $dao->actualizarDetalle();
         
         if($dao->estadoPaquete()) {
-            $this->revisionPaquete();
+          //  $this->revisionPaquete();
         }
 
         echo $res;

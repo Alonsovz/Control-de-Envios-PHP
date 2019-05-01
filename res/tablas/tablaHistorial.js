@@ -12,6 +12,9 @@ $(function() {
                     "data": "codigoEnvio"
                 },
                 {
+                    "data": "correlativo"
+                },
+                {
                     "data": "fecha"
                 },
                 {

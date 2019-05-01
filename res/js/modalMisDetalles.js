@@ -56,6 +56,10 @@ Vue.component('modal-detalles', {
                             <td v-else-if="detalle.descStatus == 'Pendiente de Revision'" style="background-color: rgba(149, 165, 166, 0.3);">
                                 {{detalle.descStatus}}
                             </td>
+                            <td v-else-if="detalle.descStatus == 'Eliminar'" style="background-color: #F5A9A9;">
+                                Eliminado
+                            </td>
+
                             <td>
                                 {{detalle.mensajero}}
                             </td>

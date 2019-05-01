@@ -92,7 +92,21 @@ class DaoEnvio extends DaoBase {
     }
 
     public function detallesEnvio() {
-        $_query = "call detallesEnvio({$this->objeto->getCodigoEnvio()})";
+        $_query = "
+        select e.codigoEnvio, d.codigoDetalleEnvio, d.correlativoDetalle, u.nomUsuario, e.fecha, e.hora, tt.descTipoTramite, c.nombreCliente, a.descArea, tc.descTipoDocumento, d.numDoc, s.descStatus, d.monto, d.observacion, m.nombre as mensajero
+	from detalleEnvio d
+	inner join envio e on e.codigoEnvio = d.codigoEnvio
+    inner join usuario u on u.codigoUsuario = e.codigoUsuario
+	inner join tipoTramite tt on tt.codigoTipoTramite = d.codigoTipoTramite
+	inner join clientes c on c.codigoCliente = d.codigoCliente
+    inner join tipoDocumento tc on tc.codigoTipoDocumento = d.codigoTipoDocumento
+    inner join area a on a.codigoArea = d.codigoArea 
+    inner join mensajero m on m.codigoMensajero = d.codigoMensajero
+    inner join status s on s.codigoStatus = d.codigoStatus
+    
+    where e.codigoEnvio = {$this->objeto->getCodigoEnvio()} and d.codigoStatus < 5
+    
+    order by d.codigoDetalleEnvio desc;";
 
         $resultado = $this->con->ejecutar($_query);
 
@@ -125,7 +139,12 @@ class DaoEnvio extends DaoBase {
 
             $btnVer = '<button id=\"'.$fila["codigoEnvio"].'\" class=\"ui btnVer icon secondary small button\"><i class=\"list ul icon\"></i></button>';
 
-            $sub_query = "call detallesEnvioLabel({$fila["codigoEnvio"]})";
+            $sub_query = "select e.codigoEnvio, d.codigoDetalleEnvio,s.descStatus
+            from detalleEnvio d
+            inner join envio e on e.codigoEnvio = d.codigoEnvio
+            inner join status s on s.codigoStatus = d.codigoStatus
+            
+            where e.codigoEnvio =  {$fila["codigoEnvio"]} order by d.codigoDetalleEnvio desc;";
 
             $sub_resultado = $this->con->ejecutar($sub_query);
 
@@ -276,7 +295,11 @@ class DaoEnvio extends DaoBase {
 
     public function mostrarPaquetes()
     {
-        $_query = "call mostrarPaquetes()";
+        $_query = "	select Distinct(e.codigoEnvio), e.correlativoEnvio, DATE_FORMAT(e.fecha,'%d/%m/%Y') as fecha, e.hora, u.nomUsuario, u.codigoUsuario, u.nombre, u.apellido from envio e
+        inner join usuario u on u.codigoUsuario = e.codigoUsuario
+        inner join detalleEnvio d on e.codigoEnvio = d.codigoEnvio
+        where e.estado = 1  and d.codigoStatus < 5
+        order by e.codigoEnvio desc;";
 
         $resultado = $this->con->ejecutar($_query);
 
@@ -296,7 +319,12 @@ class DaoEnvio extends DaoBase {
             //$btnEliminar = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" class=\"ui btnEliminar icon red small button\"><i class=\"trash icon\"></i></button>';
             $btnEliminar = '';
 
-            $sub_query = "call detallesEnvioLabel({$fila["codigoEnvio"]})";
+            $sub_query = "select e.codigoEnvio, d.codigoDetalleEnvio,s.descStatus
+            from detalleEnvio d
+            inner join envio e on e.codigoEnvio = d.codigoEnvio
+            inner join status s on s.codigoStatus = d.codigoStatus
+            where e.codigoEnvio = {$fila["codigoEnvio"]}
+            order by d.codigoDetalleEnvio desc;";
 
             $sub_resultado = $this->con->ejecutar($sub_query);
 
@@ -387,7 +415,11 @@ class DaoEnvio extends DaoBase {
 
     public function mostrarPaquetesManana()
     {
-        $_query = "call mostrarPaquetesManana()";
+        $_query = "	select Distinct(e.codigoEnvio), e.correlativoEnvio, DATE_FORMAT(e.fecha,'%d/%m/%Y') as fecha, e.hora, u.nomUsuario, u.codigoUsuario, u.nombre, u.apellido from envio e
+        inner join usuario u on u.codigoUsuario = e.codigoUsuario
+        inner join detalleEnvio d on e.codigoEnvio = d.codigoEnvio
+        where e.estado = 2  
+        order by e.codigoEnvio desc;";
 
         $resultado = $this->con->ejecutar($_query);
 
@@ -406,11 +438,16 @@ class DaoEnvio extends DaoBase {
             $btnCorreo = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" class=\"ui btnCorreo icon teal small button\"><i class=\"envelope icon\"></i></button>';
             // $btnEliminar = '<button codigo-usuario=\"'.$fila["codigoUsuario"].'\" codigo-envio=\"'.$fila["codigoEnvio"].'\" class=\"ui btnEliminar icon red small button\"><i class=\"trash icon\"></i></button>';
 
-            $sub_query = "call detallesEnvioLabel({$fila["codigoEnvio"]})";
+            $sub_query = "select e.codigoEnvio, d.codigoDetalleEnvio,s.descStatus
+            from detalleEnvio d
+            inner join envio e on e.codigoEnvio = d.codigoEnvio
+            inner join status s on s.codigoStatus = d.codigoStatus
+            
+            where e.codigoEnvio =  {$fila["codigoEnvio"]} order by d.codigoDetalleEnvio desc;";
 
             $sub_resultado = $this->con->ejecutar($sub_query);
 
-
+           
             while($sub_fila = $sub_resultado->fetch_assoc()) {
 
                 switch($sub_fila["descStatus"]) {
@@ -480,7 +517,12 @@ class DaoEnvio extends DaoBase {
 
     public function historialEnvios()
     {
-        $_query = "call historialEnvios()";
+        $_query = "select Distinct(e.codigoEnvio), e.correlativoEnvio as correlativo,
+        DATE_FORMAT(e.fecha,'%d/%m/%Y') as fecha, e.hora, u.nomUsuario, u.nombre, u.apellido from envio e
+         inner join usuario u on u.codigoUsuario = e.codigoUsuario
+         inner join detalleEnvio d on e.codigoEnvio = d.codigoEnvio
+         inner  join status s on s.codigoStatus = d.codigoStatus
+         where d.codigoStatus = 5";
 
         $resultado = $this->con->ejecutar($_query);
 
@@ -497,11 +539,17 @@ class DaoEnvio extends DaoBase {
 
             $btnVer = '<button id=\"'.$fila["codigoEnvio"].'\" class=\"ui btnVer icon secondary small button\"><i class=\"list ul icon\"></i></button>';
 
-            $sub_query = "call detallesEnvioLabel({$fila["codigoEnvio"]})";
+            $sub_query = "select e.codigoEnvio, d.codigoDetalleEnvio,s.descStatus
+            from detalleEnvio d
+            inner join envio e on e.codigoEnvio = d.codigoEnvio
+            inner join status s on s.codigoStatus = d.codigoStatus
+            where e.codigoEnvio = {$fila["codigoEnvio"]}
+             and descStatus != 'Pendiente' and descStatus != 'Recibido' and descStatus != 'Pendiente de Revision' 
+            and descStatus != 'Incompleto'  order by d.codigoDetalleEnvio desc;";
 
             $sub_resultado = $this->con->ejecutar($sub_query);
 
-
+            
             while($sub_fila = $sub_resultado->fetch_assoc()) {
 
                 switch($sub_fila["descStatus"]) {
@@ -512,9 +560,9 @@ class DaoEnvio extends DaoBase {
                     case 'Incompleto':
                         $contador_revisado++;
                         break;
-
-                    case 'Recibido':
-                        $contador_revisado++;
+                    
+                    case 'Recibido': 
+                        $contador_recibido++;
                         break;
 
                     case 'Completo':
@@ -536,6 +584,7 @@ class DaoEnvio extends DaoBase {
 
             $object = '{
                             "codigoEnvio": "'.$fila["codigoEnvio"].'",
+                            "correlativo": "'.$fila["correlativo"].'",
                             "fecha": "'.$fila["fecha"].'",
                             "hora": "'.$fila["hora"].'",
                             "nomUsuario": "'.$fila["nomUsuario"].'",
